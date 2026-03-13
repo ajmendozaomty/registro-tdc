@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registro de TDC</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+    .card { background: white; border-radius: 20px; padding: 32px; max-width: 480px; width: 100%; box-shadow: 0 25px 60px rgba(0,0,0,0.4); }
+    .center { text-align: center; }
+    label.field { display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px; }
+    input, select { width: 100%; padding: 10px 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; color: #0f172a; background: white; }
+    .btn { width: 100%; padding: 14px; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; color: white; }
+    .btn-blue { background: #1e40af; }
+    .btn-gray { background: #cbd5e1; cursor: not-allowed; }
+    .btn-green { background: #059669; }
+    .row { display: flex; gap: 12px; margin-bottom: 20px; }
+    .col { flex: 1; }
+    .error { padding: 10px 14px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 10px; color: #dc2626; font-size: 13px; margin-bottom: 16px; }
+    .upload-label { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 28px 20px; border: 2px dashed #cbd5e1; border-radius: 14px; background: #fafafa; cursor: pointer; margin-bottom: 12px; }
+    .step-dots { display: flex; align-items: center; margin-bottom: 28px; }
+    .dot { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; flex-shrink: 0; }
+    .dot-done { background: #22c55e; color: white; }
+    .dot-active { background: #1e40af; color: white; }
+    .dot-idle { background: #e5e7eb; color: #9ca3af; }
+    .line { flex: 1; height: 2px; margin: 0 4px; }
+    .toggle-wrap { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: #f8fafc; border-radius: 10px; margin-bottom: 20px; }
+    .toggle-btn { width: 52px; height: 28px; border-radius: 14px; border: none; cursor: pointer; position: relative; padding: 0; transition: background 0.2s; }
+    .toggle-knob { width: 22px; height: 22px; border-radius: 50%; background: white; position: absolute; top: 3px; transition: left 0.2s; }
+  </style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+const PRESET_CARDS = [
+  { id: "rappi", name: "Rappi Card", initial: "R", color: "#6C3483", bg: "#F4ECF7" },
+  { id: "likeu", name: "Santander Like U", initial: "S", color: "#CC0000", bg: "#FDEDEC" },
+  { id: "nu", name: "Nu", initial: "N", color: "#820AD1", bg: "#F5EEF8" },
+  { id: "amex", name: "Amex", initial: "AMEX", color: "#006FCF", bg: "#EBF5FB" },
+];
+const MONTHS = ["ENE","FEB","MAR","ABR","MAY","JUN","JUL","AGO","SEP","OCT","NOV","DIC"];
+const pad2 = n => String(n).padStart(2,"0");
+
+function buildCode(q, month, year, initial, payDate) {
+  const dd = pad2(payDate.getDate());
+  const mm = pad2(payDate.getMonth()+1);
+  const yy = String(payDate.getFullYear()).slice(-2);
+  return `Q${q}${month}${year}${initial}${dd}${mm}${yy}`;
+}
+
+function generateExcel(card, transactions, code) {
+  const wb = XLSX.utils.book_new();
+  const hasHora = transactions.some(t => t.hora);
+  const headers = hasHora
+    ? ["Fecha","Hora","Descripción","Monto","Banco","Status","Código de Pago"]
+    : ["Fecha","Descripción","Monto","Banco","Status","Código de Pago"];
+  const rows = transactions.map(t => {
+    const monto = ["Anulado","Rechazada"].includes(t.status) ? -Math.abs(t.monto) : t.monto;
+    return hasHora
+      ? [t.fecha, t.hora||"", t.descripcion, monto, card.name, t.status, code]
+      : [t.fecha, t.descripcion, monto, card.name, t.status, code];
+  });
+  const ws = XLSX.utils.aoa_to_sheet([headers, ...rows]);
+  ws["!cols"] = hasHora
+    ? [{wch:12},{wch:7},{wch:28},{wch:12},{wch:18},{wch:12},{wch:22}]
+    : [{wch:12},{wch:28},{wch:12},{wch:18},{wch:12},{wch:22}];
+  XLSX.utils.book_append_sheet(wb, ws, card.name.slice(0,31));
+  XLSX.writeFile(wb, `${card.initial}_${code}.xlsx`);
+}
+
+async function extractTransactions(files, cardName, hasHour) {
+  const imageContent = await Promise.all(files.map(file => new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = () => res({ type:"image", source:{ type:"base64", media_type: file.type, data: r.result.split(",")[1] }});
+    r.onerror = rej;
+    r.readAsDataURL(file);
+  })));
+
+  const prompt = `Eres un asistente que extrae transacciones bancarias de screenshots.
+Tarjeta: ${cardName}
+${hasHour ? "Esta app SÍ muestra hora por transacción." : "Esta app NO muestra hora, solo fecha por bloque."}
+INSTRUCCIONES CRÍTICAS:
+1. Lee TODAS las imágenes en orden (son scroll consecutivo de la misma pantalla)
+2. Los screenshots se solapan — usa fecha${hasHour ? "+hora" : " y contexto"} para NO repetir transacciones
+3. Ordena de más antigua a más nueva
+4. Status: "Anulado" si está tachado/anulado/rechazado, "Pendiente" si dice pendiente, "Normal" si no dice nada
+5. Monto como número positivo sin $ ni signos
+6. Año inferido del contexto (Feb-Mar 2026)
+7. Formato fecha: DD/MM/YYYY
+Responde ÚNICAMENTE con JSON válido sin markdown:
+{"transactions":[{"fecha":"DD/MM/YYYY",${hasHour?'"hora":"HH:MM",':""}  "descripcion":"NOMBRE","monto":123.45,"status":"Normal"}]}`;
+
+  const res = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 1000,
+      messages: [{ role:"user", content:[...imageContent,{ type:"text", text: prompt }]}]
+    })
+  });
+  const data = await res.json();
+  const text = (data.content||[]).map(b=>b.text||"").join("");
+  return JSON.parse(text.replace(/```json|```/g,"").trim());
+}
+
+// ── State ──────────────────────────────────────────────────────────
+let state = {
+  step: 0, q:"2", month:"FEB", year:"26", payDate:"",
+  selectedCards:[], customCards:[], cardQueue:[], currentCardIdx:0,
+  files:[], hasHour:true, results:[], loading:false, error:"",
+  newCard:{ name:"", initial:"", color:"#6C3483" }, showAddCard:false
+};
+
+function setState(patch) { Object.assign(state, patch); render(); }
+
+// ── Render ─────────────────────────────────────────────────────────
+function render() {
+  const app = document.getElementById("app");
+  const { step } = state;
+  if (step === 0) app.innerHTML = renderStep0();
+  else if (step === 1) app.innerHTML = renderStep1();
+  else if (step === 2) app.innerHTML = renderStep2();
+  else app.innerHTML = renderStep3();
+  bindEvents();
+}
+
+function renderStep0() {
+  const { q, month, year, payDate } = state;
+  const monthOpts = MONTHS.map(m => `<option value="${m}" ${month===m?"selected":""}>${m}</option>`).join("");
+  let codePreview = "";
+  if (payDate) {
+    const pd = new Date(payDate+"T12:00:00");
+    const dd = pad2(pd.getDate()), mm = pad2(pd.getMonth()+1), yy = String(pd.getFullYear()).slice(-2);
+    codePreview = `<p style="margin:8px 0 0;font-size:13px;color:#6b7280">Código base: <strong style="color:#1e40af">Q${q}${month}${year}[TARJETA]${dd}${mm}${yy}</strong></p>`;
+  }
+  return `<div class="card">
+    <div class="center" style="margin-bottom:32px">
+      <div style="font-size:40px;margin-bottom:8px">💳</div>
+      <h1 style="font-size:26px;font-weight:700;color:#0f172a">Registro de TDC</h1>
+      <p style="margin-top:8px;color:#64748b;font-size:15px">Extrae tus transacciones automáticamente</p>
+    </div>
+    <div class="row">
+      <div class="col">
+        <label class="field">Quincena</label>
+        <div style="display:flex;gap:8px">
+          <button onclick="setState({q:'1'})" style="flex:1;padding:10px 0;border:2px solid ${q==='1'?'#1e40af':'#e5e7eb'};border-radius:10px;background:${q==='1'?'#1e40af':'white'};color:${q==='1'?'white':'#374151'};font-weight:700;font-size:16px;cursor:pointer">Q1</button>
+          <button onclick="setState({q:'2'})" style="flex:1;padding:10px 0;border:2px solid ${q==='2'?'#1e40af':'#e5e7eb'};border-radius:10px;background:${q==='2'?'#1e40af':'white'};color:${q==='2'?'white':'#374151'};font-weight:700;font-size:16px;cursor:pointer">Q2</button>
+        </div>
+      </div>
+      <div class="col" style="flex:2">
+        <label class="field">Mes</label>
+        <select onchange="setState({month:this.value})">${monthOpts}</select>
+      </div>
+      <div class="col">
+        <label class="field">Año</label>
+        <input value="${year}" maxlength="2" placeholder="26" onchange="setState({year:this.value.slice(-2)})" />
+      </div>
+    </div>
+    <div style="margin-bottom:28px">
+      <label class="field">Fecha de pago</label>
+      <input type="date" value="${payDate}" onchange="setState({payDate:this.value})" />
+      ${codePreview}
+    </div>
+    <button class="btn ${payDate?'btn-blue':'btn-gray'}" onclick="${payDate?"setState({step:1})":""}">Continuar →</button>
+  </div>`;
+}
+
+function renderStep1() {
+  const { q, month, year, selectedCards, customCards, showAddCard, newCard } = state;
+  const allCards = [...PRESET_CARDS, ...customCards];
+  const cardItems = allCards.map(card => {
+    const sel = selectedCards.includes(card.id);
+    return `<button onclick="toggleCard('${card.id}')" style="display:flex;align-items:center;gap:14px;padding:14px 18px;border:2px solid ${sel?card.color:'#e5e7eb'};border-radius:12px;background:${sel?card.bg:'white'};cursor:pointer;text-align:left;width:100%;margin-bottom:10px">
+      <div style="width:36px;height:36px;border-radius:10px;background:${card.color};display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:11px;flex-shrink:0">${card.initial}</div>
+      <div style="flex:1">
+        <div style="font-weight:700;color:#0f172a;font-size:15px">${card.name}</div>
+        <div style="font-size:12px;color:#6b7280">Código: Q${q}${month}${year}${card.initial}...</div>
+      </div>
+      <div style="width:22px;height:22px;border-radius:50%;border:2px solid ${sel?card.color:'#d1d5db'};background:${sel?card.color:'white'};display:flex;align-items:center;justify-content:center;color:white;font-size:13px;flex-shrink:0">${sel?'✓':''}</div>
+    </button>`;
+  }).join("");
+
+  const addCardForm = showAddCard ? `
+    <div style="border:2px dashed #cbd5e1;border-radius:12px;padding:16px;margin-bottom:16px">
+      <div style="display:flex;gap:10px;margin-bottom:10px">
+        <input placeholder="Nombre (ej. BBVA)" value="${newCard.name}" onchange="state.newCard.name=this.value" style="flex:2;padding:8px 12px;border:1px solid #e5e7eb;border-radius:8px;font-size:14px" />
+        <input placeholder="Inicial" value="${newCard.initial}" onchange="state.newCard.initial=this.value.toUpperCase()" style="flex:1;padding:8px 12px;border:1px solid #e5e7eb;border-radius:8px;font-size:14px" />
+        <input type="color" value="${newCard.color}" onchange="state.newCard.color=this.value" style="width:44px;height:38px;border:1px solid #e5e7eb;border-radius:8px;cursor:pointer;padding:2px" />
+      </div>
+      <div style="display:flex;gap:8px">
+        <button onclick="addCustomCard()" style="flex:1;padding:8px 0;background:#1e40af;color:white;border:none;border-radius:8px;font-weight:600;cursor:pointer">Agregar</button>
+        <button onclick="setState({showAddCard:false})" style="flex:1;padding:8px 0;background:#f1f5f9;color:#374151;border:none;border-radius:8px;font-weight:600;cursor:pointer">Cancelar</button>
+      </div>
+    </div>` : `<button onclick="setState({showAddCard:true})" style="width:100%;padding:12px 0;border:2px dashed #cbd5e1;border-radius:12px;background:transparent;color:#64748b;font-size:14px;cursor:pointer;margin-bottom:16px">+ Agregar otra tarjeta</button>`;
+
+  const n = selectedCards.length;
+  return `<div class="card">
+    <h2 style="font-size:22px;font-weight:700;color:#0f172a;margin-bottom:8px">¿Qué tarjetas vas a registrar?</h2>
+    <p style="color:#64748b;font-size:14px;margin-bottom:24px">Selecciona todas las que procesarás hoy</p>
+    ${cardItems}
+    ${addCardForm}
+    <button class="btn ${n?'btn-blue':'btn-gray'}" onclick="${n?'startProcessing()':''}">Procesar ${n} tarjeta${n!==1?'s':''} →</button>
+  </div>`;
+}
+
+function renderStep2() {
+  const { cardQueue, currentCardIdx, files, hasHour, loading, error } = state;
+  const currentCard = cardQueue[currentCardIdx];
+  const { q, month, year, payDate } = state;
+  const code = payDate ? buildCode(q, month, year, currentCard.initial, new Date(payDate+"T12:00:00")) : "";
+
+  const dots = cardQueue.map((c, i) => {
+    const cls = i < currentCardIdx ? 'dot-done' : i === currentCardIdx ? 'dot-active' : 'dot-idle';
+    const label = i < currentCardIdx ? '✓' : i+1;
+    const line = i < cardQueue.length-1 ? `<div class="line" style="background:${i<currentCardIdx?'#22c55e':'#e5e7eb'}"></div>` : '';
+    return `<div style="display:flex;align-items:center;${i<cardQueue.length-1?'flex:1':''}"><div class="dot ${cls}">${label}</div>${line}</div>`;
+  }).join("");
+
+  const fileNames = files.map(f=>f.name).join(", ");
+  const uploadBorder = files.length ? currentCard.color : '#cbd5e1';
+  const uploadBg = files.length ? currentCard.bg : '#fafafa';
+
+  return `<div class="card">
+    <div class="step-dots">${dots}</div>
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px;padding:16px 20px;background:${currentCard.bg};border-radius:14px;border:2px solid ${currentCard.color}20">
+      <div style="width:48px;height:48px;border-radius:12px;background:${currentCard.color};display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:13px">${currentCard.initial}</div>
+      <div>
+        <div style="font-weight:700;font-size:17px;color:#0f172a">${currentCard.name}</div>
+        <div style="font-size:12px;color:#6b7280">Código: <strong>${code}</strong></div>
+      </div>
+    </div>
+    <div class="toggle-wrap">
+      <div>
+        <div style="font-weight:600;font-size:14px;color:#374151">¿La app muestra hora?</div>
+        <div style="font-size:12px;color:#6b7280">Rappi/Nu sí. Santander/Amex no.</div>
+      </div>
+      <button class="toggle-btn" onclick="setState({hasHour:!state.hasHour})" style="background:${hasHour?'#1e40af':'#d1d5db'}">
+        <div class="toggle-knob" style="left:${hasHour?'27px':'3px'}"></div>
+      </button>
+    </div>
+    <label class="upload-label" style="border-color:${uploadBorder};background:${uploadBg}">
+      <input type="file" multiple accept="image/*" style="display:none" onchange="handleFiles(this.files)" />
+      <div style="font-size:36px">📸</div>
+      ${files.length
+        ? `<div style="text-align:center"><div style="font-weight:700;color:${currentCard.color};font-size:15px">${files.length} imagen${files.length>1?'es':''} lista${files.length>1?'s':''}</div><div style="font-size:12px;color:#6b7280;margin-top:4px">${fileNames}</div></div>`
+        : `<div style="text-align:center"><div style="font-weight:600;color:#374151;font-size:15px">Toca aquí para seleccionar fotos</div><div style="font-size:12px;color:#9ca3af;margin-top:4px">JPG, PNG · puedes elegir varias</div></div>`
+      }
+    </label>
+    ${files.length ? `<button onclick="setState({files:[]})" style="display:block;margin:0 auto 8px;background:none;border:none;color:#ef4444;font-size:13px;cursor:pointer">✕ Limpiar imágenes</button>` : ''}
+    ${error ? `<div class="error">${error}</div>` : ''}
+    <button class="btn" onclick="${loading||!files.length?'':'processCard()'}" style="background:${loading?'#6b7280':(!files.length?'#cbd5e1':currentCard.color)};cursor:${loading||!files.length?'not-allowed':'pointer'}">
+      ${loading ? '⏳ Extrayendo transacciones...' : `Procesar ${currentCard.name} →`}
+    </button>
+  </div>`;
+}
+
+function renderStep3() {
+  const { results } = state;
+  const items = results.map((r, i) => `
+    <div style="display:flex;align-items:center;gap:14px;padding:14px 18px;background:${r.card.bg};border-radius:12px;border:1px solid ${r.card.color}30;margin-bottom:10px">
+      <div style="width:36px;height:36px;border-radius:10px;background:${r.card.color};display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:11px">${r.card.initial}</div>
+      <div style="flex:1">
+        <div style="font-weight:700;color:#0f172a">${r.card.name}</div>
+        <div style="font-size:12px;color:#6b7280">${r.transactions.length} transacciones · ${r.code}</div>
+      </div>
+      <button onclick="downloadOne(${i})" style="padding:8px 16px;background:${r.card.color};color:white;border:none;border-radius:8px;font-weight:600;font-size:13px;cursor:pointer">⬇ Excel</button>
+    </div>`).join("");
+
+  return `<div class="card">
+    <div class="center" style="margin-bottom:32px">
+      <div style="font-size:48px;margin-bottom:12px">🎉</div>
+      <h2 style="font-size:24px;font-weight:700;color:#0f172a">¡Listo!</h2>
+      <p style="margin-top:8px;color:#64748b">Se procesaron ${results.length} tarjetas</p>
+    </div>
+    ${items}
+    <button class="btn btn-green" onclick="downloadAll()" style="margin-bottom:12px">⬇ Descargar todos los Excel</button>
+    <button class="btn" style="background:#f1f5f9;color:#374151" onclick="resetApp()">Empezar nueva quincena</button>
+  </div>`;
+}
+
+// ── Actions ────────────────────────────────────────────────────────
+function toggleCard(id) {
+  const sel = state.selectedCards;
+  setState({ selectedCards: sel.includes(id) ? sel.filter(x=>x!==id) : [...sel, id] });
+}
+
+function addCustomCard() {
+  const { newCard } = state;
+  if (!newCard.name || !newCard.initial) return;
+  const id = "custom_"+Date.now();
+  const card = { ...newCard, id, bg:"#F9F9F9", light:"#F0F0F0" };
+  setState({
+    customCards: [...state.customCards, card],
+    selectedCards: [...state.selectedCards, id],
+    newCard: { name:"", initial:"", color:"#6C3483" },
+    showAddCard: false
+  });
+}
+
+function startProcessing() {
+  const allCards = [...PRESET_CARDS, ...state.customCards];
+  const queue = allCards.filter(c => state.selectedCards.includes(c.id));
+  setState({ cardQueue: queue, currentCardIdx: 0, results: [], step: 2 });
+}
+
+function handleFiles(fileList) {
+  setState({ files: Array.from(fileList) });
+}
+
+async function processCard() {
+  const { files, cardQueue, currentCardIdx, results, hasHour, q, month, year, payDate } = state;
+  if (!files.length) { setState({ error: "Sube al menos un screenshot" }); return; }
+  setState({ error: "", loading: true });
+  const currentCard = cardQueue[currentCardIdx];
+  try {
+    const data = await extractTransactions(files, currentCard.name, hasHour);
+    const pd = new Date(payDate+"T12:00:00");
+    const code = buildCode(q, month, year, currentCard.initial, pd);
+    const newResults = [...results, { card: currentCard, transactions: data.transactions, code }];
+    if (currentCardIdx + 1 < cardQueue.length) {
+      setState({ results: newResults, currentCardIdx: currentCardIdx+1, files: [], hasHour: true, loading: false });
+    } else {
+      setState({ results: newResults, step: 3, loading: false });
+    }
+  } catch(e) {
+    setState({ error: "Error al procesar: "+e.message, loading: false });
+  }
+}
+
+function downloadOne(i) { const r = state.results[i]; generateExcel(r.card, r.transactions, r.code); }
+function downloadAll() { state.results.forEach(r => generateExcel(r.card, r.transactions, r.code)); }
+function resetApp() { setState({ step:0, results:[], files:[], selectedCards:[], payDate:"", cardQueue:[], currentCardIdx:0 }); }
+
+function bindEvents() {} // events are inline
+
+render();
+</script>
+</body>
+</html>
