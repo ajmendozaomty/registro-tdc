@@ -93,7 +93,7 @@ INSTRUCCIONES CRÍTICAS:
 Responde ÚNICAMENTE con JSON válido sin markdown:
 {"transactions":[{"fecha":"DD/MM/YYYY",${hasHour?'"hora":"HH:MM",':""}  "descripcion":"NOMBRE","monto":123.45,"status":"Normal"}]}`;
 
-  const res = await fetch("https://api.anthropic.com/v1/messages", {
+  const res = await fetch("/api/proxy", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -107,7 +107,6 @@ Responde ÚNICAMENTE con JSON válido sin markdown:
   return JSON.parse(text.replace(/```json|```/g,"").trim());
 }
 
-// ── State ──────────────────────────────────────────────────────────
 let state = {
   step: 0, q:"2", month:"FEB", year:"26", payDate:"",
   selectedCards:[], customCards:[], cardQueue:[], currentCardIdx:0,
@@ -117,7 +116,6 @@ let state = {
 
 function setState(patch) { Object.assign(state, patch); render(); }
 
-// ── Render ─────────────────────────────────────────────────────────
 function render() {
   const app = document.getElementById("app");
   const { step } = state;
@@ -125,7 +123,6 @@ function render() {
   else if (step === 1) app.innerHTML = renderStep1();
   else if (step === 2) app.innerHTML = renderStep2();
   else app.innerHTML = renderStep3();
-  bindEvents();
 }
 
 function renderStep0() {
@@ -282,7 +279,6 @@ function renderStep3() {
   </div>`;
 }
 
-// ── Actions ────────────────────────────────────────────────────────
 function toggleCard(id) {
   const sel = state.selectedCards;
   setState({ selectedCards: sel.includes(id) ? sel.filter(x=>x!==id) : [...sel, id] });
@@ -334,8 +330,6 @@ async function processCard() {
 function downloadOne(i) { const r = state.results[i]; generateExcel(r.card, r.transactions, r.code); }
 function downloadAll() { state.results.forEach(r => generateExcel(r.card, r.transactions, r.code)); }
 function resetApp() { setState({ step:0, results:[], files:[], selectedCards:[], payDate:"", cardQueue:[], currentCardIdx:0 }); }
-
-function bindEvents() {} // events are inline
 
 render();
 </script>
