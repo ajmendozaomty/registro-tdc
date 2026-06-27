@@ -102,9 +102,12 @@ Responde ÚNICAMENTE con JSON válido sin markdown:
       messages: [{ role:"user", content:[...imageContent,{ type:"text", text: prompt }]}]
     })
   });
-  const data = await res.json();
   const text = (data.content||[]).map(b=>b.text||"").join("");
-  return JSON.parse(text.replace(/```json|```/g,"").trim());
+const clean = text.replace(/```json|```/g,"").trim();
+const jsonStart = clean.indexOf("{");
+const jsonEnd = clean.lastIndexOf("}");
+const jsonStr = clean.slice(jsonStart, jsonEnd + 1);
+return JSON.parse(jsonStr);
 }
 
 let state = {
