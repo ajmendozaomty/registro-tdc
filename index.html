@@ -88,26 +88,37 @@ INSTRUCCIONES CRÍTICAS:
 3. Ordena de más antigua a más nueva
 4. Status: "Anulado" si está tachado/anulado/rechazado, "Pendiente" si dice pendiente, "Normal" si no dice nada
 5. Monto como número positivo sin $ ni signos
-6. Año inferido del contexto (Feb-Mar 2026)
+6. Año inferido del contexto
 7. Formato fecha: DD/MM/YYYY
-Responde ÚNICAMENTE con JSON válido sin markdown:
+Responde ÚNICAMENTE con JSON válido sin markdown, sin texto adicional antes ni después:
 {"transactions":[{"fecha":"DD/MM/YYYY",${hasHour?'"hora":"HH:MM",':""}  "descripcion":"NOMBRE","monto":123.45,"status":"Normal"}]}`;
 
   const res = await fetch("/api/proxy", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      model: "claude-sonnet-4-20250514",
+      model: "claude-sonnet-4-6",
       max_tokens: 5000,
       messages: [{ role:"user", content:[...imageContent,{ type:"text", text: prompt }]}]
     })
   });
-  const text = (data.content||[]).map(b=>b.text||"").join("");
-const clean = text.replace(/```json|```/g,"").trim();
-const jsonStart = clean.indexOf("{");
-const jsonEnd = clean.lastIndexOf("}");
-const jsonStr = clean.slice(jsonStart, jsonEnd + 1);
-return JSON.parse(jsonStr);
+
+  const data = await res.json();
+
+  if (!data || !data.content) {
+    throw new Error("Respuesta vacía del API: " + JSON.stringify(data));
+  }
+
+  const text = (data.content || []).map(b => b.text || "").join("");
+  const clean = text.replace(/```json|```/g, "").trim();
+  const jsonStart = clean.indexOf("{");
+  const jsonEnd = clean.lastIndexOf("}");
+
+  if (jsonStart === -1 || jsonEnd === -1) {
+    throw new Error("No se encontró JSON en la respuesta: " + clean.slice(0, 200));
+  }
+
+  return JSON.parse(clean.slice(jsonStart, jsonEnd + 1));
 }
 
 let state = {
