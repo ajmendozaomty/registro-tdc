@@ -42,6 +42,9 @@ const PRESET_CARDS = [
   { id: "amex", name: "Amex", initial: "AMEX", color: "#006FCF", bg: "#EBF5FB" },
 ];
 const MONTHS = ["ENE","FEB","MAR","ABR","MAY","JUN","JUL","AGO","SEP","OCT","NOV","DIC"];
+// Debe coincidir con APP_SHARED_SECRET en las env vars de Vercel (evita que bots que
+// escaneen *.vercel.app usen /api/proxy gratis con tu API key de Anthropic).
+const APP_SHARED_SECRET = "hBK06LKRnTSxcftU8KcPSIjVdkomEoPrrI8bIfIIqVQ";
 const pad2 = n => String(n).padStart(2,"0");
 
 function buildCode(q, month, year, initial, payDate) {
@@ -95,7 +98,7 @@ Responde ÚNICAMENTE con JSON válido sin markdown, sin texto adicional antes ni
 
   const res = await fetch("/api/proxy", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", "x-app-secret": APP_SHARED_SECRET },
     body: JSON.stringify({
       model: "claude-sonnet-4-6",
       max_tokens: 5000,
