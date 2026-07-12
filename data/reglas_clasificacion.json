@@ -1,0 +1,3470 @@
+{
+  "meta": {
+    "fuente": "Gastos_Mensuales_AJMO_copia.xlsx / Control de Gastos",
+    "filas_analizadas": 2080,
+    "umbral_confianza_clasificacion": 0.7,
+    "min_muestras_clasificacion": 2,
+    "cobertura_estimada_pct": 77.92,
+    "nota_usuario": "Usuario NO es inferible de forma confiable a partir del Concepto en la gran mayoria de los casos: Jose concentra ~88% de todas las filas (baseline), por lo que cualquier keyword generica (UBER, HEB, COSTCO, OXXO, AMAZON, etc.) hereda ese sesgo sin ser señal real. Solo se detectaron un puñado de keywords con señal genuina (lift >= 1.3 sobre el baseline): tipicamente cuando el propio texto del Concepto/Detalle nombra explicitamente a la persona o un lugar asociado de forma exclusiva a ella (ej. 'WILLY', 'VITRO'). Para el resto de transacciones, Usuario depende de contexto externo (quien trae la tarjeta, quien hizo el viaje) que no esta codificado en el texto del Concepto.",
+    "nota_transc_type": "Transc Type (Ida/Regreso) NO es inferible desde el texto del Concepto: incluso para el mismo merchant/keyword (ej. 'UBER VITRO': 42 Ida / 42 Regreso), la distribucion es esencialmente 50/50. Esto tiene sentido porque Ida/Regreso describe la direccion del viaje (orden cronologico / ida-y-vuelta), no el merchant que cobra. No se generaron reglas para este campo; se recomienda inferirlo por secuencia/contexto (ej. alternar Ida/Regreso por fecha) en vez de por texto del Concepto."
+  },
+  "clasificacion_por_keyword": {
+    "RAPPI": {
+      "valor": "Munchies",
+      "confianza": 0.8,
+      "n_muestras": 5
+    },
+    "UBER": {
+      "valor": "Transporte",
+      "confianza": 0.8612,
+      "n_muestras": 281
+    },
+    "DOGTOR": {
+      "valor": "Manutencion Denver",
+      "confianza": 0.9167,
+      "n_muestras": 12
+    },
+    "LATA": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 6
+    },
+    "COMIDA DENVER": {
+      "valor": "Manutencion Denver",
+      "confianza": 0.9231,
+      "n_muestras": 13
+    },
+    "LATA COMIDA": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "LATA COMIDA DENVER": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "PETCO": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 17
+    },
+    "HEB MAYO": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "MAYO": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 6
+    },
+    "NUTRI": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 10
+    },
+    "UBER NUTRI": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 5
+    },
+    "POLLO LOCO": {
+      "valor": "Entretenimiento",
+      "confianza": 0.913,
+      "n_muestras": 23
+    },
+    "AGUAS": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "LOCO": {
+      "valor": "Entretenimiento",
+      "confianza": 0.913,
+      "n_muestras": 23
+    },
+    "POLLO": {
+      "valor": "Entretenimiento",
+      "confianza": 0.9231,
+      "n_muestras": 26
+    },
+    "VUELTA": {
+      "valor": "Transporte",
+      "confianza": 0.75,
+      "n_muestras": 4
+    },
+    "UBER HEB": {
+      "valor": "Transporte",
+      "confianza": 0.9259,
+      "n_muestras": 27
+    },
+    "PAU": {
+      "valor": "Entretenimiento",
+      "confianza": 0.7778,
+      "n_muestras": 9
+    },
+    "VITRO": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 84
+    },
+    "UBER VITRO": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 84
+    },
+    "UBER CUMPLE": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "UBER DENVER": {
+      "valor": "Manutencion Denver",
+      "confianza": 0.7692,
+      "n_muestras": 13
+    },
+    "VETERINAR DOGTOR": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 11
+    },
+    "BROWN": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 9
+    },
+    "BANO DENVER": {
+      "valor": "Manutencion Denver",
+      "confianza": 0.75,
+      "n_muestras": 16
+    },
+    "DOGTOR BROWN": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 8
+    },
+    "VETERINAR": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 13
+    },
+    "UBER KURAI": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "REGRESO": {
+      "valor": "Transporte",
+      "confianza": 0.9394,
+      "n_muestras": 33
+    },
+    "LADYS": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "BQQ": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "LADYS BQQ": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "LUZ": {
+      "valor": "Alojamiento",
+      "confianza": 0.7895,
+      "n_muestras": 19
+    },
+    "LUZ MAYO": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "UBER CORTE DE PELO": {
+      "valor": "Transporte",
+      "confianza": 0.75,
+      "n_muestras": 4
+    },
+    "UBER CORTE": {
+      "valor": "Transporte",
+      "confianza": 0.75,
+      "n_muestras": 4
+    },
+    "SUSY": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "SUNGLASS": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "HUT": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "SUNGLASS HUT": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "SUNGLASS HUT MTY": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "HUT MTY": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "CARMELA": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "UBER REGRESO": {
+      "valor": "Transporte",
+      "confianza": 0.8462,
+      "n_muestras": 13
+    },
+    "REGRESO HEB": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 6
+    },
+    "HEB SEMANA 3": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 7
+    },
+    "HEB SEMANA 4": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 8
+    },
+    "PAPA": {
+      "valor": "Entretenimiento",
+      "confianza": 0.75,
+      "n_muestras": 4
+    },
+    "REGALO PAPA": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "AGUA": {
+      "valor": "Alojamiento",
+      "confianza": 0.8235,
+      "n_muestras": 17
+    },
+    "AGUA WILLY": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "CAFE": {
+      "valor": "Entretenimiento",
+      "confianza": 0.8333,
+      "n_muestras": 18
+    },
+    "HEB SEMANA 1": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "UBER HEB SEMANA 1": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "DAIRY": {
+      "valor": "Entretenimiento",
+      "confianza": 0.7368,
+      "n_muestras": 19
+    },
+    "QUEEN": {
+      "valor": "Entretenimiento",
+      "confianza": 0.7368,
+      "n_muestras": 19
+    },
+    "DAIRY QUEEN": {
+      "valor": "Entretenimiento",
+      "confianza": 0.7368,
+      "n_muestras": 19
+    },
+    "UBER DOG": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "UBER DOG TOR Y NUTRI": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "TOR NUTRI": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "DOG TOR": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "TOR": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "DOG": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "UBER HEB SEMANA 2": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "SEVEN": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 28
+    },
+    "VENTILADOR": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "UBER VENTILADOR": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "YOGUFRUT": {
+      "valor": "Entretenimiento",
+      "confianza": 0.9412,
+      "n_muestras": 17
+    },
+    "AMAZON PRIME": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 7
+    },
+    "PRIME": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 7
+    },
+    "GAS": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 6
+    },
+    "JOSE": {
+      "valor": "Alojamiento",
+      "confianza": 0.7778,
+      "n_muestras": 9
+    },
+    "HEB WILLY": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "COSTO": {
+      "valor": "Entretenimiento",
+      "confianza": 0.75,
+      "n_muestras": 4
+    },
+    "COSTO MTY": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "SEPHORA": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "SEPHORA REGALO": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "SEPHORA REGALO ISA": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "CHAT": {
+      "valor": "Alojamiento",
+      "confianza": 0.875,
+      "n_muestras": 8
+    },
+    "GPT": {
+      "valor": "Alojamiento",
+      "confianza": 0.875,
+      "n_muestras": 8
+    },
+    "CHAT GPT": {
+      "valor": "Alojamiento",
+      "confianza": 0.875,
+      "n_muestras": 8
+    },
+    "TACOS": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 9
+    },
+    "UBER MARISA": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "UBER SUPER": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "UBER ACERO": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "ACERO": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "UBER DE ACERO": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "UBER DENVER RECOGIDA": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "SERVICIO AGUA": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "SERVICIO DE AGUA": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "EXTRA": {
+      "valor": "Alojamiento",
+      "confianza": 0.8571,
+      "n_muestras": 7
+    },
+    "SHACK": {
+      "valor": "Entretenimiento",
+      "confianza": 0.7143,
+      "n_muestras": 7
+    },
+    "SHAKE SHACK": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "SHAKE SHACK ARBOLEDA": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "SHACK ARBOLEDA": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "SHAKE": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "BREAD ARBOLEDA": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 6
+    },
+    "UBER LAB": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DATE": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "UBER DATE": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "GAUCHO": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "UBER GAUCHO": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "GUADALAJARA": {
+      "valor": "Entretenimiento",
+      "confianza": 0.75,
+      "n_muestras": 4
+    },
+    "IDA": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 15
+    },
+    "UBER IDA": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "LUZ JULIO": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "BIENVENIDA": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "CALLE": {
+      "valor": "Entretenimiento",
+      "confianza": 0.75,
+      "n_muestras": 4
+    },
+    "TAQUERIA": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "HEB SEMANA 2": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 5
+    },
+    "CINEPOLIS": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 8
+    },
+    "CINE": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DONAS": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "ELOTES": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "UBER SCHNEIDER": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "COSTCO COMIDA": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "SUPER SALDAS": {
+      "valor": "Entretenimiento",
+      "confianza": 0.7692,
+      "n_muestras": 13
+    },
+    "SALDAS": {
+      "valor": "Entretenimiento",
+      "confianza": 0.7692,
+      "n_muestras": 13
+    },
+    "POMADA": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "CARLS JR": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 5
+    },
+    "CARLS": {
+      "valor": "Entretenimiento",
+      "confianza": 0.8571,
+      "n_muestras": 14
+    },
+    "UBER BANO DENVER": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "UBER BANO": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "UBER PAULA": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "LATA DENVER": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "UBER REGRESO HEB": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "ALIEXPRESS": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "UBER ARBOLEDA": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "ENZIMAX": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "SEGURO": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "REPARACION": {
+      "valor": "Transporte",
+      "confianza": 0.8,
+      "n_muestras": 5
+    },
+    "REPARACION AREPARI": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "AREPARI TEC": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "UBER REPARACION AREPARI TEC": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "UBER REPARACION": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "AREPARI": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "CACEP": {
+      "valor": "Entretenimiento",
+      "confianza": 0.75,
+      "n_muestras": 4
+    },
+    "BRAVECTO": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "TACOS PARILLADA": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "PARILLADA": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "CHICHARRON": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "ORINOCO": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 8
+    },
+    "UBER HEB SEMANA 3": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "BRUGGE": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "ATARANTADOS": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "TACOS ATARANTADOS": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DEPA": {
+      "valor": "Transporte",
+      "confianza": 0.8966,
+      "n_muestras": 29
+    },
+    "UBER DEPA": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "UBER RECOGIDA": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "MACDONALDS": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "MILLE DELICE": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "MILLE": {
+      "valor": "Entretenimiento",
+      "confianza": 0.7273,
+      "n_muestras": 11
+    },
+    "DELICE": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "SUS": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 5
+    },
+    "UBERS SCHNEIDER": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "EATS": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "UBER EATS": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "RECARGA": {
+      "valor": "Alojamiento",
+      "confianza": 0.75,
+      "n_muestras": 4
+    },
+    "EATS PIZZA": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "UBER EATS PIZZA": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "LILA CAFE": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "LILA": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "UBER SCHENIDER": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "SCHENIDER": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "CORTE DE PELO": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "STARBUCKS": {
+      "valor": "Entretenimiento",
+      "confianza": 0.75,
+      "n_muestras": 4
+    },
+    "CHUBB": {
+      "valor": "Transporte",
+      "confianza": 0.8246,
+      "n_muestras": 114
+    },
+    "UBER CHUBB": {
+      "valor": "Transporte",
+      "confianza": 0.9565,
+      "n_muestras": 23
+    },
+    "CARTA": {
+      "valor": "Transporte",
+      "confianza": 0.75,
+      "n_muestras": 4
+    },
+    "CHUBB CARTA": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "UBER CHUBB CARTA": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "ROPA": {
+      "valor": "Alojamiento",
+      "confianza": 0.9167,
+      "n_muestras": 12
+    },
+    "MIGRACION": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 5
+    },
+    "MIGRACION 1": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "XBOX": {
+      "valor": "Entretenimiento",
+      "confianza": 0.75,
+      "n_muestras": 4
+    },
+    "ARMIE": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "OPEN PIZZA": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "OPEN": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "MAMA": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "REGALO CUKI": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "VACUNAS": {
+      "valor": "Manutencion Denver",
+      "confianza": 0.75,
+      "n_muestras": 8
+    },
+    "VACUNAS DENVER": {
+      "valor": "Manutencion Denver",
+      "confianza": 0.8571,
+      "n_muestras": 7
+    },
+    "UBER POSADA": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "POSADA": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 6
+    },
+    "CHUBB IDA": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "MOZARRELA": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "UBER COSTCO": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "UBER REGRESO CHUBB": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "REGRESO CHUBB": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "DIDI CHUBB": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 67
+    },
+    "CHUBB REGRESO": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "DIDI": {
+      "valor": "Transporte",
+      "confianza": 0.8895,
+      "n_muestras": 344
+    },
+    "DIDI COSTCO": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 5
+    },
+    "DIDI IDA": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DIDI DESAYUNO": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DIDI DEPA": {
+      "valor": "Transporte",
+      "confianza": 0.9,
+      "n_muestras": 10
+    },
+    "DEPA CUKI": {
+      "valor": "Transporte",
+      "confianza": 0.9412,
+      "n_muestras": 17
+    },
+    "PATAGONIA": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "LAPTOP": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "PAN": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "UBER VACUNAS DENVER": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "UBER VACUNAS": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "SAGARPA": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "UBER SAGARPA": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "SELLO": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "SELLO DENVER": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "SEGUNDO SELLO": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "GUANTES": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "CAYALA": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DUNKIN DONUTS": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DUNKIN": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "DONUTS": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "REGALO JEFE": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "JEFE": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "GALENO": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "LACTASA": {
+      "valor": "Medicina y Doctores",
+      "confianza": 0.7143,
+      "n_muestras": 7
+    },
+    "CONSULTA GYTAN": {
+      "valor": "Medicina y Doctores",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "GYTAN": {
+      "valor": "Medicina y Doctores",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "CONSULTA DR. GYTAN": {
+      "valor": "Medicina y Doctores",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "PARQUEO CONSULTA": {
+      "valor": "Medicina y Doctores",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "BAMBU": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "CHINA": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "BEBEIDA": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "CAFERIA": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "BEBEIDA CHUBB": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "CAFERIA BEBEIDA": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "CAFERIA EL - BEBEIDA CHUBB": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "UBERS FINDE": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "FINDE": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "CLARO": {
+      "valor": "Alojamiento",
+      "confianza": 0.75,
+      "n_muestras": 4
+    },
+    "SMART FIT": {
+      "valor": "Alojamiento",
+      "confianza": 0.8333,
+      "n_muestras": 6
+    },
+    "SMART": {
+      "valor": "Alojamiento",
+      "confianza": 0.8333,
+      "n_muestras": 6
+    },
+    "FIT": {
+      "valor": "Alojamiento",
+      "confianza": 0.8333,
+      "n_muestras": 6
+    },
+    "CACAO": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 5
+    },
+    "CAFE CACAO": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 5
+    },
+    "PELEA": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "LABORATORIO": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "UBER LABORATORIO": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "CANCELADO": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DIDI CANCELADO": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DIDI - CANCELADO": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "CHUBB SIERRA": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DIDI CHUBB - SIERRA MADRE": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "TAQUERIA ORINOCO": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "ESCRITORIOS": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "UBER ESCRITORIOS": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "APP": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 6
+    },
+    "MARKET": {
+      "valor": "Munchies",
+      "confianza": 0.75,
+      "n_muestras": 4
+    },
+    "KOREAN": {
+      "valor": "Munchies",
+      "confianza": 0.75,
+      "n_muestras": 4
+    },
+    "KOREAN MARKET": {
+      "valor": "Munchies",
+      "confianza": 0.75,
+      "n_muestras": 4
+    },
+    "DIDI HEB": {
+      "valor": "Transporte",
+      "confianza": 0.9455,
+      "n_muestras": 55
+    },
+    "ABONO TEMPORAL": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 5
+    },
+    "TEMPORAL": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 5
+    },
+    "ABONO": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 5
+    },
+    "LOCO TEC": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 9
+    },
+    "POLLO LOCO TEC": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 7
+    },
+    "SAN AGUSTIN": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "AGUSTIN": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "AMAZON MX MARKETPLACE": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 6
+    },
+    "MARKETPLACE": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 6
+    },
+    "AMAZON MARKETPLACE": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 6
+    },
+    "PIZZA CUKI": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "SMARTFIT": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "UBER CUKI CUMPLE": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "CUKI CUMPLE": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "CLIP ALIMYOGUFRUT": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "CLIP": {
+      "valor": "Entretenimiento",
+      "confianza": 0.8226,
+      "n_muestras": 62
+    },
+    "ALIMYOGUFRUT": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DLO*DIDIFOOD": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DLO DIDIFOOD": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DLO": {
+      "valor": "Transporte",
+      "confianza": 0.8456,
+      "n_muestras": 298
+    },
+    "DLO DIDI": {
+      "valor": "Transporte",
+      "confianza": 0.8711,
+      "n_muestras": 287
+    },
+    "ELEVEN AGRONOMOS": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "ELEVEN": {
+      "valor": "Munchies",
+      "confianza": 0.885,
+      "n_muestras": 113
+    },
+    "7 ELEVEN AGRONOMOS": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "AGRONOMOS": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "HELADO": {
+      "valor": "Entretenimiento",
+      "confianza": 0.8333,
+      "n_muestras": 6
+    },
+    "PIZZA TEC": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "OPEN PIZZA TEC": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "7 ELEVEN": {
+      "valor": "Munchies",
+      "confianza": 0.8969,
+      "n_muestras": 97
+    },
+    "CALIENTE": {
+      "valor": "Entretenimiento",
+      "confianza": 0.8571,
+      "n_muestras": 7
+    },
+    "DIDI RIDES": {
+      "valor": "Transporte",
+      "confianza": 0.9416,
+      "n_muestras": 274
+    },
+    "RIDES": {
+      "valor": "Transporte",
+      "confianza": 0.9416,
+      "n_muestras": 274
+    },
+    "DID": {
+      "valor": "Transporte",
+      "confianza": 0.9091,
+      "n_muestras": 22
+    },
+    "EXU": {
+      "valor": "P-A",
+      "confianza": 0.7143,
+      "n_muestras": 7
+    },
+    "MUNCHIS": {
+      "valor": "Munchies",
+      "confianza": 0.8,
+      "n_muestras": 5
+    },
+    "REST DIDIFOOD": {
+      "valor": "Munchies",
+      "confianza": 0.72,
+      "n_muestras": 50
+    },
+    "LA COMIDA DE LA CALLE": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "COMIDA CALLE": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "ZETTLE - CAFECACAO": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "ZETTLE CAFECACAO": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "CAFECACAO": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 5
+    },
+    "DLO*DIDI RIDES": {
+      "valor": "Transporte",
+      "confianza": 0.945,
+      "n_muestras": 218
+    },
+    "PARCIAL": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "REVERSION": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "AJUSTE": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "AJUSTE REVERSION": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "REVERSION PARCIAL": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "AJUSTE DE REVERSION PARCIAL": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DEVOLUCION": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "DEVOLUCION DIDI": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DIDI ESTADIO": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "TRIP": {
+      "valor": "Transporte",
+      "confianza": 0.9231,
+      "n_muestras": 13
+    },
+    "UBER TRIP": {
+      "valor": "Transporte",
+      "confianza": 0.9231,
+      "n_muestras": 13
+    },
+    "UBER* TRIP": {
+      "valor": "Transporte",
+      "confianza": 0.8333,
+      "n_muestras": 6
+    },
+    "DID BANO": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DIDI BANO": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "LISTO": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DENVER LISTO": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "CLIP REST": {
+      "valor": "Entretenimiento",
+      "confianza": 0.7609,
+      "n_muestras": 46
+    },
+    "CALLEJERO": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 5
+    },
+    "REST CAFE": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "ATTACK": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "REST ATTACK": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "CLIP MX REST ATTACK ON": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "MEMBRESIA": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "BABY": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "ELOTE BABY": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "ASIA": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "MERCA ASIA": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "MERCA": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "CLIP ALIM": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 13
+    },
+    "ALIM": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 13
+    },
+    "ALIM YOGUFRUT": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 11
+    },
+    "CLARA URBAN": {
+      "valor": "Entretenimiento",
+      "confianza": 0.75,
+      "n_muestras": 4
+    },
+    "VILLAG": {
+      "valor": "Entretenimiento",
+      "confianza": 0.75,
+      "n_muestras": 4
+    },
+    "URBAN VILLAG": {
+      "valor": "Entretenimiento",
+      "confianza": 0.75,
+      "n_muestras": 4
+    },
+    "STA CLARA URBAN VILLAG": {
+      "valor": "Entretenimiento",
+      "confianza": 0.75,
+      "n_muestras": 4
+    },
+    "COCA CHUBB": {
+      "valor": "Munchies",
+      "confianza": 0.75,
+      "n_muestras": 4
+    },
+    "CAFETERIA EL": {
+      "valor": "Munchies",
+      "confianza": 0.8,
+      "n_muestras": 5
+    },
+    "ZTL": {
+      "valor": "Entretenimiento",
+      "confianza": 0.8286,
+      "n_muestras": 35
+    },
+    "ZTL MAASDENTISTAS": {
+      "valor": "Medicina y Doctores",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "MAASDENTISTAS": {
+      "valor": "Medicina y Doctores",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DENTISTA": {
+      "valor": "Transporte",
+      "confianza": 0.75,
+      "n_muestras": 4
+    },
+    "REPOSICION": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "POR": {
+      "valor": "Transporte",
+      "confianza": 0.7143,
+      "n_muestras": 7
+    },
+    "CANCELACION": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "POR CANCELACION": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "REPOSICION TARJETA": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "REPOSICION POR": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "CINEPOLIS APP TICKETS": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "APP TICKETS": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "CINEPOLIS APP": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "TICKETS": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "EMMA": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DEPA EMMA": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "VISITA": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "PAYIN": {
+      "valor": "Transporte",
+      "confianza": 0.8571,
+      "n_muestras": 14
+    },
+    "DIDI PAYIN": {
+      "valor": "Transporte",
+      "confianza": 0.8571,
+      "n_muestras": 14
+    },
+    "DLO *DIDI MX PAYIN": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "SEGPAY SKYLINE": {
+      "valor": "P-A",
+      "confianza": 0.9167,
+      "n_muestras": 12
+    },
+    "SEGPAY COM SKYLINE": {
+      "valor": "P-A",
+      "confianza": 0.9167,
+      "n_muestras": 12
+    },
+    "SKYLINE": {
+      "valor": "P-A",
+      "confianza": 0.9167,
+      "n_muestras": 12
+    },
+    "SEGPAY": {
+      "valor": "P-A",
+      "confianza": 0.9167,
+      "n_muestras": 12
+    },
+    "ISLA": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "EL GLOBO ISLA PLAZA FA": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "GLOBO": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "GLOBO ISLA": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "ISLA PLAZA": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "MUNCHIS CUMPLE": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "ENTRANCE": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "MAIN ENTRANCE": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "MAIN": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "TDA": {
+      "valor": "Alojamiento",
+      "confianza": 0.75,
+      "n_muestras": 4
+    },
+    "TDA CA MAIN ENTRANCE": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "TDA MAIN": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "SCOOP": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "SCOOP ARBOLEDA": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "PLUS CONTRY": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "PLUS": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "PETCO MX": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 8
+    },
+    "GARRAFONES": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "GARRAFONES AGUA": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "GARZA": {
+      "valor": "Entretenimiento",
+      "confianza": 0.7143,
+      "n_muestras": 7
+    },
+    "ZTL CAFECACAO": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "ZTL*CAFECACAO": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "CLIP MX*ALIM YO": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "ARBOLEDA CUMPLE": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DLO*DIDI MX PAYIN RIDE": {
+      "valor": "Transporte",
+      "confianza": 0.8,
+      "n_muestras": 10
+    },
+    "PAYIN RIDE": {
+      "valor": "Transporte",
+      "confianza": 0.8182,
+      "n_muestras": 11
+    },
+    "RIDE": {
+      "valor": "Transporte",
+      "confianza": 0.8667,
+      "n_muestras": 15
+    },
+    "DIDI ARBOLEDA": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "MOZARRELA CUMPLE": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DIDI MOZARRELA": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "ZAPATOS CUMPLE": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "INNOVA ZAPATOS": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "HOUSE CUMPLE": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "SANTANDER": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "DIDI SANTANDER": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "CUENTA": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "CUENTA BLOQUEADA": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "BLOQUEADA": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "SANTANDER CUENTA": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "FIRMA CONTRATO": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "CONTRATO DEPA": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "FIRMA": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "CONTRATO": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DIDI FIRMA": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "FUNDA": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "AGREGADOR": {
+      "valor": "Munchies",
+      "confianza": 0.9091,
+      "n_muestras": 11
+    },
+    "CA GIRO AGREGADOR": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 9
+    },
+    "GIRO AGREGADOR": {
+      "valor": "Munchies",
+      "confianza": 0.9,
+      "n_muestras": 10
+    },
+    "GIRO": {
+      "valor": "Munchies",
+      "confianza": 0.9,
+      "n_muestras": 10
+    },
+    "CAPIBROWNIE": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 7
+    },
+    "AMERICAN EAGLE": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "AMERICAN": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 5
+    },
+    "EAGLE": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "ROPA OFICINA": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "OFICINA": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "H&M": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "SUSY PRO": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "PRO": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "POSTRE": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "SUCURSAL": {
+      "valor": "Entretenimiento",
+      "confianza": 0.8889,
+      "n_muestras": 9
+    },
+    "NARVARTE": {
+      "valor": "Medicina y Doctores",
+      "confianza": 0.7143,
+      "n_muestras": 14
+    },
+    "MY KOREAN MARKET": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "DIDI FASHION": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "PASEO TEC": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DIDI PASEO": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "PASEO": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "VISA": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "DIDI CORTE": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "AULAS": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DID DEPA": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 6
+    },
+    "DIDI OFFICE": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DEPOT": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "OFFICE DEPOT": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "OFFICE": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DIDI REGRESO": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 6
+    },
+    "DIDI VISA": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DEJAR": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 5
+    },
+    "DEJAR COSAS": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "D LOCAL REST DIDIFOOD": {
+      "valor": "Munchies",
+      "confianza": 0.775,
+      "n_muestras": 40
+    },
+    "LOCAL REST": {
+      "valor": "Munchies",
+      "confianza": 0.7561,
+      "n_muestras": 41
+    },
+    "D LOCAL*DIDI RIDES": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 21
+    },
+    "LOCAL DIDI": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 21
+    },
+    "DIDI DHL": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DHL": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DID HEB": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 7
+    },
+    "MUDANZA": {
+      "valor": "Transporte",
+      "confianza": 0.8,
+      "n_muestras": 5
+    },
+    "DONALD": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "MC DONALD S GARZA S": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "DONALD GARZA": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "REST SUCURSAL": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 8
+    },
+    "CLIP MX*REST SUCURSAL": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 8
+    },
+    "CARLS JR SAN AGUSTIN": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "CARLS SAN": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "PROCESO": {
+      "valor": "Entretenimiento",
+      "confianza": 0.8182,
+      "n_muestras": 11
+    },
+    "WELLHUB": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "FISIO": {
+      "valor": "Medicina y Doctores",
+      "confianza": 0.75,
+      "n_muestras": 4
+    },
+    "BILLPOCKET FISIO": {
+      "valor": "Medicina y Doctores",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "GEN": {
+      "valor": "Medicina y Doctores",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "FISIO GEN": {
+      "valor": "Medicina y Doctores",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "BILLPOCKET*FISIO GEN": {
+      "valor": "Medicina y Doctores",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "ZTL CAFE": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "LIMPIEZA": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "OXXO MEXICO": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 6
+    },
+    "YAMATO": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "REST YAMATO": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "REST SS NUEVO SUR": {
+      "valor": "Entretenimiento",
+      "confianza": 0.9091,
+      "n_muestras": 11
+    },
+    "REST NUEVO": {
+      "valor": "Entretenimiento",
+      "confianza": 0.9091,
+      "n_muestras": 11
+    },
+    "BMARINDAVALOS": {
+      "valor": "Entretenimiento-P",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "7 ELEVEN T1 TEC": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "ELEVEN TEC": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "T2310": {
+      "valor": "Munchies",
+      "confianza": 0.9091,
+      "n_muestras": 11
+    },
+    "7 ELEVEN T2310": {
+      "valor": "Munchies",
+      "confianza": 0.8889,
+      "n_muestras": 9
+    },
+    "ELEVEN T2310": {
+      "valor": "Munchies",
+      "confianza": 0.9091,
+      "n_muestras": 11
+    },
+    "PRONTO": {
+      "valor": "Entretenimiento",
+      "confianza": 0.9231,
+      "n_muestras": 13
+    },
+    "COMIDAS": {
+      "valor": "Entretenimiento",
+      "confianza": 0.9231,
+      "n_muestras": 13
+    },
+    "COMIDAS PRONTO": {
+      "valor": "Entretenimiento",
+      "confianza": 0.9231,
+      "n_muestras": 13
+    },
+    "REST MILLE DELICES": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "CLIP MX*ALIM YOGUFRUT": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 10
+    },
+    "REST NOSHI NUEVO SUR": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "NOSHI NUEVO": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "NOSHI": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "REST NOSHI": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "DENVER CONSULTA": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "CHIBOLA": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "CONSULTA CHIBOLA": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DIDI MUDANZA": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "CONCIERTO KEVIN": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DIDI CONCIERTO": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "CONCIERTO": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "SANGRE": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "EXAMENES SANGRE": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DENVER EXAMENES": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "GOOGLE FORMERLY": {
+      "valor": "P-A",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "FORMERLY TWI": {
+      "valor": "P-A",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "FORMERLY": {
+      "valor": "P-A",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "GOOGLE X FORMERLY TWI": {
+      "valor": "P-A",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "TWI": {
+      "valor": "P-A",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "SAMUEL": {
+      "valor": "Transporte",
+      "confianza": 0.75,
+      "n_muestras": 8
+    },
+    "REGIO": {
+      "valor": "Entretenimiento-P",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "REGIO TOCUMBO": {
+      "valor": "Entretenimiento-P",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "TOCUMBO": {
+      "valor": "Entretenimiento-P",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "SHAKESHACK": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "PAYPAL SHAKESHACK": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "INTOXICACION": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DENVER INTOXICACION": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "BREAD POR": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "POR CAMILA": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "CAMILA": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "IDA BREAD": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "VISITA SAMUEL": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "SAMUEL POR": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "VEMTILADOR FEDEX": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "VEMTILADOR": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DEJAR VEMTILADOR": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "FEDEX": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "SUPER EXTRA": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "EXTRA SEMANA": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DLO DIDI FOODS": {
+      "valor": "Munchies",
+      "confianza": 0.8889,
+      "n_muestras": 9
+    },
+    "BENA330808JUNCO": {
+      "valor": "Medicina y Doctores",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "BENA330808JUNCO DE LA": {
+      "valor": "Medicina y Doctores",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "CAFELIMON": {
+      "valor": "Entretenimiento",
+      "confianza": 0.7742,
+      "n_muestras": 31
+    },
+    "ZTL CAFELIMON": {
+      "valor": "Entretenimiento",
+      "confianza": 0.8571,
+      "n_muestras": 28
+    },
+    "ZTL*CAFELIMON": {
+      "valor": "Entretenimiento",
+      "confianza": 0.8519,
+      "n_muestras": 27
+    },
+    "DIDI OJOS": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "OJOS": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DIDI FIEST": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "FIEST": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "FIEST SAMUEL": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DEJADA": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "BANO RECOGIDA": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "GOOGLE CLOUD": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "PAYU": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "PAYU GOOGLE CLOUD": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "PAYU GOOGLE": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "CLOUD": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "AMAZON MEXICO": {
+      "valor": "Alojamiento",
+      "confianza": 0.8462,
+      "n_muestras": 26
+    },
+    "GOMEZ": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "LACT": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "LACT YOGUFRUT": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "PUNTO VALLE": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "PUNTO": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "VALLE REGALO": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "NMX": {
+      "valor": "Entretenimiento",
+      "confianza": 0.75,
+      "n_muestras": 4
+    },
+    "NMX CALIENTE": {
+      "valor": "Entretenimiento",
+      "confianza": 0.75,
+      "n_muestras": 4
+    },
+    "FASHI DRIVE": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "FASHI": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "HM MX0009 FASHI DRIVE": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "MX0009": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "MX0009 FASHI": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "REA AUTOPISTA": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "AUTOPISTA GPE": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "GPE": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "REA AUTOPISTA GPE": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "TRAMITES DENVER": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "TRAMITES": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "AUTOPISTA": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "REA": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "SAUL": {
+      "valor": "Entretenimiento",
+      "confianza": 0.75,
+      "n_muestras": 4
+    },
+    "TIENDA": {
+      "valor": "Munchies",
+      "confianza": 0.8,
+      "n_muestras": 5
+    },
+    "PARQUEOS": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "CLIP MX*REST BREAD TEC": {
+      "valor": "Entretenimiento",
+      "confianza": 0.7391,
+      "n_muestras": 23
+    },
+    "BARVIN": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "REST BARVIN": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "CAFE SAUL": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "CAFE SAUL 6 AVENIDA Z": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "AVENIDA": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "SAUL AVENIDA": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "COFFEE": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "LUCES": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "LUCES DEPA": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "ESTANTES": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "ESTANTES LUCES": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "REVOLUCION": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "CAESARS": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "CAESARS REVOLUCION": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "RAPPI LITTLE": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "LITTLE CAESARS": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "STREAM": {
+      "valor": "P-A",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "FBENAVIDES": {
+      "valor": "Medicina y Doctores",
+      "confianza": 1.0,
+      "n_muestras": 5
+    },
+    "FBENAVIDES NARVARTE": {
+      "valor": "Medicina y Doctores",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "TOTO": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "INM": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "CLIP MX*REST BARVIN": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "NAYAXX1 NAYAX": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "TIENDITA": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "TIENDITA CHUBB": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "NAYAXX1": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "NAYAXX1*NAYAX VENDING": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "NAYAX": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 7
+    },
+    "NAYAX VENDING": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 7
+    },
+    "VENDING": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 7
+    },
+    "VALLE OTE": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "OTE": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "LIVERPOOL VALLE OTE": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "LIVERPOOL VALLE": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "HELP UBER": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 7
+    },
+    "TRIP HELP": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 7
+    },
+    "UBER *TRIP HELP.UBER.C": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 7
+    },
+    "HELP": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 7
+    },
+    "REGRESO SHACK": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "NAYAXX NAYAX": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 5
+    },
+    "NAYAXX NAYAX VENDING": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 5
+    },
+    "NAYAXX": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 5
+    },
+    "STR LIME": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "S3RQ": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "SCOOTER": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "LIME RIDE": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "MAKE": {
+      "valor": "P-A",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "MONKEY": {
+      "valor": "P-A",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "MONKEY MAKE": {
+      "valor": "P-A",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "GOOGLE MONKEY": {
+      "valor": "P-A",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "GOOGLE MONKEY MAKE NE": {
+      "valor": "P-A",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "VETERINAR DOCTOR": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "PUNTA": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "PUNTA COUNTRY": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "SUPERAMA PUNTA COUNTRY": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "SUPERAMA": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "COUNTRY": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "SUPERAMA PUNTA": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "MARRIOT CUMPLE": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "MARRIOT": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "CUMPLE WILLY": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DIDI MARRIOT": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "WWW CONTABO": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "CONTABO": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "WWW": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "WWW CONTABO COM": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "TIENDA CHUBB": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "ARGENTINO": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "NIEVES ARGENTINO": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "NIEVES EL ARGENTINO": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "NIEVES": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "UBER BABYSIT": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "BABYSIT": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "BABYSIT DENVER": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DLO DIDI FOOD GR": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 4
+    },
+    "FOOD": {
+      "valor": "Munchies",
+      "confianza": 0.8,
+      "n_muestras": 5
+    },
+    "DIDI FOOD": {
+      "valor": "Munchies",
+      "confianza": 0.8,
+      "n_muestras": 5
+    },
+    "TEC PROCESO": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "POLLO LOCO TEC (EN PROCESO)": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "SAN PROCESO": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "CARLS JR SAN AG (EN PROCESO)": {
+      "valor": "Entretenimiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "T2310 PENDIENTE": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "7 ELEVEN T2310 (PENDIENTE)": {
+      "valor": "Munchies",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DECATHLON (PENDIENTE)": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DECATHLON PENDIENTE": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DECATHLON": {
+      "valor": "Alojamiento",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DLO DIDI RIDES MX": {
+      "valor": "Transporte",
+      "confianza": 0.9062,
+      "n_muestras": 32
+    },
+    "SBARRO": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "DIDI SBARRO": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "STRIPE - LIME MEXICO": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "LIME MEXICO": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 3
+    },
+    "STR LIME RIDE S RQ": {
+      "valor": "Transporte",
+      "confianza": 1.0,
+      "n_muestras": 2
+    },
+    "VETERINAR DOGTOR...": {
+      "valor": "Manutencion Denver",
+      "confianza": 1.0,
+      "n_muestras": 2
+    }
+  },
+  "transc_type_por_keyword": {},
+  "usuario_por_keyword": {
+    "VITRO": {
+      "valor": "Willy",
+      "confianza": 1.0,
+      "n_muestras": 84,
+      "lift_vs_baseline": 15.04
+    },
+    "UBER VITRO": {
+      "valor": "Willy",
+      "confianza": 1.0,
+      "n_muestras": 84,
+      "lift_vs_baseline": 15.04
+    }
+  },
+  "categorias_normalizadas": {
+    "Entretenimiento": "Entretenimiento",
+    "Transporte": "Transporte",
+    "Manutencion Denver ": "Manutencion Denver",
+    "Alojamiento": "Alojamiento",
+    "Entretenimiento-P": "Entretenimiento-P",
+    "Entretenimiento - P": "Entretenimiento-P",
+    "Medicina y Doctores": "Medicina y Doctores",
+    "Munchies ": "Munchies",
+    "Inversiones ": "Inversiones",
+    "P-A": "P-A",
+    "Regalos": "Regalos",
+    "Servicios": "Servicios",
+    "Suscripciones": "Suscripciones"
+  },
+  "keywords_ambiguas_revisar": [
+    {
+      "keyword": "HEB",
+      "valor": "Transporte",
+      "confianza": 0.5568,
+      "n_muestras": 176
+    },
+    {
+      "keyword": "REST",
+      "valor": "Entretenimiento",
+      "confianza": 0.5259,
+      "n_muestras": 135
+    },
+    {
+      "keyword": "DENVER",
+      "valor": "Manutencion Denver",
+      "confianza": 0.6916,
+      "n_muestras": 107
+    },
+    {
+      "keyword": "TEC",
+      "valor": "Entretenimiento",
+      "confianza": 0.4306,
+      "n_muestras": 72
+    },
+    {
+      "keyword": "AMAZON",
+      "valor": "Alojamiento",
+      "confianza": 0.5797,
+      "n_muestras": 69
+    },
+    {
+      "keyword": "LOCAL",
+      "valor": "Munchies",
+      "confianza": 0.5,
+      "n_muestras": 62
+    },
+    {
+      "keyword": "OXXO",
+      "valor": "Munchies",
+      "confianza": 0.5932,
+      "n_muestras": 59
+    },
+    {
+      "keyword": "CUKI",
+      "valor": "Transporte",
+      "confianza": 0.4231,
+      "n_muestras": 52
+    },
+    {
+      "keyword": "DIDIFOOD",
+      "valor": "Munchies",
+      "confianza": 0.6923,
+      "n_muestras": 52
+    },
+    {
+      "keyword": "SEMANA",
+      "valor": "Alojamiento",
+      "confianza": 0.6364,
+      "n_muestras": 44
+    },
+    {
+      "keyword": "BREAD",
+      "valor": "Entretenimiento",
+      "confianza": 0.6429,
+      "n_muestras": 42
+    },
+    {
+      "keyword": "SUPER",
+      "valor": "Entretenimiento",
+      "confianza": 0.5476,
+      "n_muestras": 42
+    },
+    {
+      "keyword": "NUEVO",
+      "valor": "Entretenimiento",
+      "confianza": 0.6429,
+      "n_muestras": 42
+    },
+    {
+      "keyword": "HEB SEMANA",
+      "valor": "Alojamiento",
+      "confianza": 0.65,
+      "n_muestras": 40
+    },
+    {
+      "keyword": "NUEVO SUR",
+      "valor": "Entretenimiento",
+      "confianza": 0.65,
+      "n_muestras": 40
+    },
+    {
+      "keyword": "SUR",
+      "valor": "Entretenimiento",
+      "confianza": 0.65,
+      "n_muestras": 40
+    },
+    {
+      "keyword": "COSTCO",
+      "valor": "Entretenimiento",
+      "confianza": 0.3947,
+      "n_muestras": 38
+    },
+    {
+      "keyword": "WILLY",
+      "valor": "Alojamiento",
+      "confianza": 0.5278,
+      "n_muestras": 36
+    },
+    {
+      "keyword": "MEXICO",
+      "valor": "Alojamiento",
+      "confianza": 0.6286,
+      "n_muestras": 35
+    },
+    {
+      "keyword": "COMIDA",
+      "valor": "Entretenimiento",
+      "confianza": 0.4516,
+      "n_muestras": 31
+    },
+    {
+      "keyword": "DIDI DENVER",
+      "valor": "Transporte",
+      "confianza": 0.6129,
+      "n_muestras": 31
+    },
+    {
+      "keyword": "PIZZA",
+      "valor": "Entretenimiento",
+      "confianza": 0.5667,
+      "n_muestras": 30
+    },
+    {
+      "keyword": "REST BREAD",
+      "valor": "Entretenimiento",
+      "confianza": 0.6552,
+      "n_muestras": 29
+    },
+    {
+      "keyword": "GOOGLE",
+      "valor": "Suscripciones",
+      "confianza": 0.3214,
+      "n_muestras": 28
+    },
+    {
+      "keyword": "LIME",
+      "valor": "Transporte",
+      "confianza": 0.6667,
+      "n_muestras": 27
+    },
+    {
+      "keyword": "BREAD TEC",
+      "valor": "Entretenimiento",
+      "confianza": 0.6538,
+      "n_muestras": 26
+    },
+    {
+      "keyword": "HEB TEC",
+      "valor": "Alojamiento",
+      "confianza": 0.56,
+      "n_muestras": 25
+    },
+    {
+      "keyword": "STRIPE LIME",
+      "valor": "Transporte",
+      "confianza": 0.6087,
+      "n_muestras": 23
+    },
+    {
+      "keyword": "STRIPE",
+      "valor": "Transporte",
+      "confianza": 0.6087,
+      "n_muestras": 23
+    },
+    {
+      "keyword": "CUMPLE",
+      "valor": "Transporte",
+      "confianza": 0.6818,
+      "n_muestras": 22
+    }
+  ]
+}
