@@ -191,10 +191,43 @@ Responde ÚNICAMENTE con JSON válido sin markdown, sin texto adicional antes ni
   return JSON.parse(clean.slice(jsonStart, jsonEnd + 1));
 }
 
+// Extrae el saldo total de un screenshot de estado de cuenta (validacion opcional contra
+// la suma de transacciones extraidas de la quincena).
+async function extractSaldo(file) {
+  const imageContent = await new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = () => res({ type:"image", source:{ type:"base64", media_type: file.type, data: r.result.split(",")[1] }});
+    r.onerror = rej;
+    r.readAsDataURL(file);
+  });
+  const prompt = `Este screenshot muestra el estado de cuenta o saldo de una tarjeta de credito.
+Extrae UNICAMENTE el saldo/monto total a pagar de la quincena o periodo mostrado.
+Responde SOLO con JSON, sin markdown ni texto adicional: {"saldo_total": 1234.56}
+Si no encuentras un total claro y confiable, responde {"saldo_total": null}`;
+
+  const res = await fetch("/api/proxy", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "x-app-secret": APP_SHARED_SECRET },
+    body: JSON.stringify({
+      model: "claude-sonnet-4-6",
+      max_tokens: 300,
+      messages: [{ role:"user", content:[imageContent, { type:"text", text: prompt }]}]
+    })
+  });
+  const data = await res.json();
+  const text = (data.content || []).map(b => b.text || "").join("");
+  const clean = text.replace(/```json|```/g, "").trim();
+  const jsonStart = clean.indexOf("{");
+  const jsonEnd = clean.lastIndexOf("}");
+  if (jsonStart === -1 || jsonEnd === -1) return null;
+  try { return JSON.parse(clean.slice(jsonStart, jsonEnd + 1)).saldo_total; }
+  catch (e) { return null; }
+}
+
 let state = {
   step: 0, q:"2", month:"FEB", year:"26", payDate:"",
   selectedCards:[], customCards:[], cardQueue:[], currentCardIdx:0,
-  files:[], hasHour:true, results:[], loading:false, error:"",
+  files:[], balanceFile:null, hasHour:true, results:[], loading:false, error:"",
   newCard:{ name:"", initial:"", color:"#6C3483" }, showAddCard:false
 };
 
@@ -289,7 +322,7 @@ function renderStep1() {
 }
 
 function renderStep2() {
-  const { cardQueue, currentCardIdx, files, hasHour, loading, error } = state;
+  const { cardQueue, currentCardIdx, files, balanceFile, hasHour, loading, error } = state;
   const currentCard = cardQueue[currentCardIdx];
   const { q, month, year, payDate } = state;
   const code = payDate ? buildCode(q, month, year, currentCard.initial, new Date(payDate+"T12:00:00")) : "";
@@ -332,6 +365,17 @@ function renderStep2() {
       }
     </label>
     ${files.length ? `<button onclick="setState({files:[]})" style="display:block;margin:0 auto 8px;background:none;border:none;color:#ef4444;font-size:13px;cursor:pointer">✕ Limpiar imágenes</button>` : ''}
+
+    <label class="field" style="margin-top:8px">Saldo total del estado de cuenta (opcional)</label>
+    <label class="upload-label" style="padding:16px 20px;border-color:${balanceFile?currentCard.color:'#cbd5e1'};background:${balanceFile?currentCard.bg:'#fafafa'}">
+      <input type="file" accept="image/*" style="display:none" onchange="handleBalanceFile(this.files)" />
+      <div style="font-size:22px">🧾</div>
+      ${balanceFile
+        ? `<div style="text-align:center"><div style="font-weight:700;color:${currentCard.color};font-size:13px">${balanceFile.name}</div></div>`
+        : `<div style="text-align:center"><div style="font-size:12px;color:#9ca3af">Para validar que el total cuadre — puedes omitir esto</div></div>`
+      }
+    </label>
+    ${balanceFile ? `<button onclick="setState({balanceFile:null})" style="display:block;margin:0 auto 8px;background:none;border:none;color:#ef4444;font-size:13px;cursor:pointer">✕ Quitar imagen de saldo</button>` : ''}
     ${error ? `<div class="error">${error}</div>` : ''}
     <button class="btn" onclick="${loading||!files.length?'':'processCard()'}" style="background:${loading?'#6b7280':(!files.length?'#cbd5e1':currentCard.color)};cursor:${loading||!files.length?'not-allowed':'pointer'}">
       ${loading ? '⏳ Extrayendo transacciones...' : `Procesar ${currentCard.name} →`}
@@ -346,13 +390,18 @@ function renderStep3() {
     const badge = nAlertas
       ? `<div style="font-size:11px;font-weight:700;color:#b45309;background:#fef3c7;padding:2px 8px;border-radius:6px;margin-top:4px;display:inline-block">⚠ ${nAlertas} para revisar</div>`
       : `<div style="font-size:11px;font-weight:700;color:#15803d;background:#dcfce7;padding:2px 8px;border-radius:6px;margin-top:4px;display:inline-block">✓ sin alertas</div>`;
+    const saldoBadge = r.saldoReal == null ? "" : (
+      Math.abs(r.diferencia) < 1
+        ? `<div style="font-size:11px;font-weight:700;color:#15803d;background:#dcfce7;padding:2px 8px;border-radius:6px;margin-top:4px;margin-left:6px;display:inline-block">✓ saldo cuadra</div>`
+        : `<div style="font-size:11px;font-weight:700;color:#dc2626;background:#fee2e2;padding:2px 8px;border-radius:6px;margin-top:4px;margin-left:6px;display:inline-block">⚠ saldo difiere $${r.diferencia}</div>`
+    );
     return `
     <div style="display:flex;align-items:center;gap:14px;padding:14px 18px;background:${r.card.bg};border-radius:12px;border:1px solid ${r.card.color}30;margin-bottom:10px">
       <div style="width:36px;height:36px;border-radius:10px;background:${r.card.color};display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:11px">${r.card.initial}</div>
       <div style="flex:1">
         <div style="font-weight:700;color:#0f172a">${r.card.name}</div>
         <div style="font-size:12px;color:#6b7280">${r.transactions.length} transacciones · ${r.code}</div>
-        ${badge}
+        ${badge}${saldoBadge}
       </div>
       <button onclick="downloadOne(${i})" style="padding:8px 16px;background:${r.card.color};color:white;border:none;border-radius:8px;font-weight:600;font-size:13px;cursor:pointer">⬇ Excel</button>
     </div>`;
@@ -399,8 +448,12 @@ function handleFiles(fileList) {
   setState({ files: Array.from(fileList) });
 }
 
+function handleBalanceFile(fileList) {
+  setState({ balanceFile: fileList[0] || null });
+}
+
 async function processCard() {
-  const { files, cardQueue, currentCardIdx, results, hasHour, q, month, year, payDate } = state;
+  const { files, balanceFile, cardQueue, currentCardIdx, results, hasHour, q, month, year, payDate } = state;
   if (!files.length) { setState({ error: "Sube al menos un screenshot" }); return; }
   setState({ error: "", loading: true });
   const currentCard = cardQueue[currentCardIdx];
@@ -421,9 +474,19 @@ async function processCard() {
       return { ...t, clasificacion: clasificar(t.descripcion), hash, duplicado };
     });
 
-    const newResults = [...results, { card: currentCard, transactions, code }];
+    const saldoCalculado = transactions.reduce((sum, t) => {
+      const monto = ["Anulado","Rechazada"].includes(t.status) ? -Math.abs(t.monto) : t.monto;
+      return sum + monto;
+    }, 0);
+    let saldoReal = null, diferencia = null;
+    if (balanceFile) {
+      try { saldoReal = await extractSaldo(balanceFile); } catch (e) { saldoReal = null; }
+      if (saldoReal != null) diferencia = +(saldoCalculado - saldoReal).toFixed(2);
+    }
+
+    const newResults = [...results, { card: currentCard, transactions, code, saldoCalculado, saldoReal, diferencia }];
     if (currentCardIdx + 1 < cardQueue.length) {
-      setState({ results: newResults, currentCardIdx: currentCardIdx+1, files: [], hasHour: true, loading: false });
+      setState({ results: newResults, currentCardIdx: currentCardIdx+1, files: [], balanceFile: null, hasHour: true, loading: false });
     } else {
       setState({ results: newResults, step: 3, loading: false });
     }
@@ -434,7 +497,7 @@ async function processCard() {
 
 function downloadOne(i) { const r = state.results[i]; generateExcel(r.card, r.transactions, r.code); }
 function downloadAll() { state.results.forEach(r => generateExcel(r.card, r.transactions, r.code)); }
-function resetApp() { setState({ step:0, results:[], files:[], selectedCards:[], payDate:"", cardQueue:[], currentCardIdx:0 }); }
+function resetApp() { setState({ step:0, results:[], files:[], balanceFile:null, selectedCards:[], payDate:"", cardQueue:[], currentCardIdx:0 }); }
 
 render();
 cargarReglas();
