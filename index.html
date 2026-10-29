@@ -135,13 +135,48 @@ function generateExcel(card, transactions, code) {
   XLSX.writeFile(wb, `${card.initial}_${code}.xlsx`);
 }
 
+// Vercel rechaza bodies > 4.5MB con un 413 en texto plano ("Request Entity Too Large").
+// Claude reduce internamente las imagenes a ~1.15MP, asi que comprimir a ese tamaño en el
+// navegador no pierde legibilidad y permite mandar muchos screenshots en un solo request.
+const MAX_IMG_PIXELS = 1150000;
+const MAX_PAYLOAD_BYTES = 4200000;
+
+async function fileToImageBlock(file) {
+  const bitmap = await createImageBitmap(file);
+  const scale = Math.min(1, Math.sqrt(MAX_IMG_PIXELS / (bitmap.width * bitmap.height)));
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.round(bitmap.width * scale);
+  canvas.height = Math.round(bitmap.height * scale);
+  const ctx = canvas.getContext("2d");
+  ctx.fillStyle = "#fff"; // fondo blanco por si el PNG trae transparencia
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+  bitmap.close();
+  const dataUrl = canvas.toDataURL("image/jpeg", 0.85);
+  return { type:"image", source:{ type:"base64", media_type:"image/jpeg", data: dataUrl.split(",")[1] }};
+}
+
+// Llama al proxy validando tamaño del payload y respuestas que no son JSON (ej. 413 de Vercel).
+async function callProxy(payload) {
+  const body = JSON.stringify(payload);
+  if (body.length > MAX_PAYLOAD_BYTES) {
+    throw new Error(`Las imágenes pesan ${(body.length/1e6).toFixed(1)}MB aun comprimidas (límite ~4.5MB). Divide el lote en dos.`);
+  }
+  const res = await fetch("/api/proxy", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "x-app-secret": APP_SHARED_SECRET },
+    body
+  });
+  const raw = await res.text();
+  let data;
+  try { data = JSON.parse(raw); }
+  catch (e) { throw new Error(`Error HTTP ${res.status}: ${raw.slice(0, 200)}`); }
+  if (!res.ok) throw new Error(`Error HTTP ${res.status}: ${data?.error?.message || data?.error || raw.slice(0, 200)}`);
+  return data;
+}
+
 async function extractTransactions(files, cardName, hasHour, expectedYear) {
-  const imageContent = await Promise.all(files.map(file => new Promise((res, rej) => {
-    const r = new FileReader();
-    r.onload = () => res({ type:"image", source:{ type:"base64", media_type: file.type, data: r.result.split(",")[1] }});
-    r.onerror = rej;
-    r.readAsDataURL(file);
-  })));
+  const imageContent = await Promise.all(files.map(fileToImageBlock));
 
   const prompt = `Eres un asistente que extrae transacciones bancarias de screenshots.
 Tarjeta: ${cardName}
@@ -163,17 +198,11 @@ INSTRUCCIONES CRÍTICAS:
 Responde ÚNICAMENTE con JSON válido sin markdown, sin texto adicional antes ni después:
 {"transactions":[{"fecha":"DD/MM/YYYY",${hasHour?'"hora":"HH:MM",':""}"descripcion":"NOMBRE","monto":123.45,"status":"Normal","alerta":null}]}`;
 
-  const res = await fetch("/api/proxy", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "x-app-secret": APP_SHARED_SECRET },
-    body: JSON.stringify({
-      model: "claude-sonnet-4-6",
-      max_tokens: 5000,
-      messages: [{ role:"user", content:[...imageContent,{ type:"text", text: prompt }]}]
-    })
+  const data = await callProxy({
+    model: "claude-sonnet-4-6",
+    max_tokens: 5000,
+    messages: [{ role:"user", content:[...imageContent,{ type:"text", text: prompt }]}]
   });
-
-  const data = await res.json();
 
   if (!data || !data.content) {
     throw new Error("Respuesta vacía del API: " + JSON.stringify(data));
@@ -194,27 +223,20 @@ Responde ÚNICAMENTE con JSON válido sin markdown, sin texto adicional antes ni
 // Extrae el saldo total de un screenshot de estado de cuenta (validacion opcional contra
 // la suma de transacciones extraidas de la quincena).
 async function extractSaldo(file) {
-  const imageContent = await new Promise((res, rej) => {
-    const r = new FileReader();
-    r.onload = () => res({ type:"image", source:{ type:"base64", media_type: file.type, data: r.result.split(",")[1] }});
-    r.onerror = rej;
-    r.readAsDataURL(file);
-  });
+  const imageContent = await fileToImageBlock(file);
   const prompt = `Este screenshot muestra el estado de cuenta o saldo de una tarjeta de credito.
 Extrae UNICAMENTE el saldo/monto total a pagar de la quincena o periodo mostrado.
 Responde SOLO con JSON, sin markdown ni texto adicional: {"saldo_total": 1234.56}
 Si no encuentras un total claro y confiable, responde {"saldo_total": null}`;
 
-  const res = await fetch("/api/proxy", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "x-app-secret": APP_SHARED_SECRET },
-    body: JSON.stringify({
+  let data;
+  try {
+    data = await callProxy({
       model: "claude-sonnet-4-6",
       max_tokens: 300,
       messages: [{ role:"user", content:[imageContent, { type:"text", text: prompt }]}]
-    })
-  });
-  const data = await res.json();
+    });
+  } catch (e) { return null; }
   const text = (data.content || []).map(b => b.text || "").join("");
   const clean = text.replace(/```json|```/g, "").trim();
   const jsonStart = clean.indexOf("{");
